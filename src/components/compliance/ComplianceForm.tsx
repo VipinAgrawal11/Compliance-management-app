@@ -5,6 +5,7 @@ import { Modal } from '@/components/ui/Modal';
 import { Field, Select, ChipMultiSelect } from '@/components/ui/Form';
 import { Spinner } from '@/components/ui/Misc';
 import { CompliancesApi, AssignmentsApi } from '@/lib/api';
+import { formatBs } from '@/lib/nepaliDate';
 import {
   COMPLIANCE_CATEGORIES,
   COMPLIANCE_SUBCATEGORIES,
@@ -145,7 +146,7 @@ export function ComplianceFormModal({
           </Field>
         </div>
         <div className="grid gap-3 sm:grid-cols-2">
-          <Field label="Due Date">
+          <Field label="Due Date (AD)" hint={dueDate ? `BS: ${formatBs(dueDate)}` : 'Pick the English (AD) date; BS shown below.'}>
             <input type="date" className="input" value={dueDate} onChange={(e) => setDueDate(e.target.value)} />
           </Field>
           <Field label="Status">

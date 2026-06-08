@@ -14,6 +14,7 @@ import { CommunicationLog } from '@/components/clients/CommunicationLog';
 import { DocumentFormModal } from '@/components/documents/DocumentForm';
 import { ClientsApi } from '@/lib/api';
 import { formatDate } from '@/lib/utils';
+import { formatBsAd } from '@/lib/nepaliDate';
 import type { DocumentRequest } from '@/types';
 
 export function ClientDetail() {
@@ -129,7 +130,7 @@ export function ClientDetail() {
               <li key={c.id} className="flex items-center justify-between gap-2 py-2.5">
                 <div className="min-w-0">
                   <p className="truncate text-sm font-medium text-navy-800">{c.subcategory}</p>
-                  <p className="text-xs text-navy-400">Due {formatDate(c.due_date)}</p>
+                  <p className="text-xs text-navy-400">Due {formatBsAd(c.due_date)}</p>
                 </div>
                 <div className="flex items-center gap-2">
                   <CategoryBadge category={c.category} />

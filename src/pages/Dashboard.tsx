@@ -14,6 +14,7 @@ import { StatCard, EmptyState } from '@/components/ui/Misc';
 import { ComplianceStatusBadge, StageBadge, OverdueBadge } from '@/components/ui/Badges';
 import { SectionTitle } from '@/components/ui/Form';
 import { formatDate, isOverdue, daysUntil } from '@/lib/utils';
+import { formatBs } from '@/lib/nepaliDate';
 import { NotificationsApi } from '@/lib/api';
 import {
   dueThisMonth,
@@ -152,8 +153,8 @@ function PartnerDashboard({
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm font-semibold text-navy-700">{formatDate(d.due_date)}</p>
-                  <p className="text-xs text-navy-400">in {daysUntil(d.due_date)} day(s)</p>
+                  <p className="text-sm font-semibold text-navy-700">{formatBs(d.due_date)} BS</p>
+                  <p className="text-xs text-navy-400">{formatDate(d.due_date)} · in {daysUntil(d.due_date)}d</p>
                 </div>
               </li>
             ))}
