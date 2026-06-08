@@ -53,7 +53,8 @@ export function DataProvider({ children }: { children: ReactNode }) {
     orderBy: 'sort_order',
     ascending: true,
   });
-  const settings = useTable<AppSettings>('app_settings');
+  // app_settings has no created_at column, so order by its primary key instead.
+  const settings = useTable<AppSettings>('app_settings', { orderBy: 'id', ascending: true });
 
   return (
     <DataContext.Provider
