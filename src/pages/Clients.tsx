@@ -1,12 +1,13 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Building2, Plus, MapPin, Phone } from 'lucide-react';
+import { Building2, Plus, MapPin, Phone, Upload } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useData } from '@/contexts/DataContext';
 import { EmptyState } from '@/components/ui/Misc';
 import { Pill } from '@/components/ui/Badges';
 import { SearchInput, Select } from '@/components/ui/Form';
 import { ClientFormModal } from '@/components/clients/ClientForm';
+import { ImportClientsModal } from '@/components/clients/ImportClientsModal';
 import { ENTITY_TYPES, type Client } from '@/types';
 
 export function Clients() {
@@ -16,6 +17,7 @@ export function Clients() {
   const [entity, setEntity] = useState('');
   const [editing, setEditing] = useState<Client | null>(null);
   const [creating, setCreating] = useState(false);
+  const [importing, setImporting] = useState(false);
 
   const isPartner = profile?.role === 'partner';
 
@@ -41,9 +43,14 @@ export function Clients() {
           <p className="text-sm text-navy-400">{clients.rows.length} client(s) on file.</p>
         </div>
         {isPartner && (
-          <button className="btn-gold" onClick={() => setCreating(true)}>
-            <Plus size={18} /> Add Client
-          </button>
+          <div className="flex gap-2">
+            <button className="btn-ghost" onClick={() => setImporting(true)}>
+              <Upload size={18} /> Import
+            </button>
+            <button className="btn-gold" onClick={() => setCreating(true)}>
+              <Plus size={18} /> Add Client
+            </button>
+          </div>
         )}
       </div>
 
@@ -104,6 +111,7 @@ export function Clients() {
           }}
         />
       )}
+      {importing && <ImportClientsModal onClose={() => setImporting(false)} />}
     </div>
   );
 }
