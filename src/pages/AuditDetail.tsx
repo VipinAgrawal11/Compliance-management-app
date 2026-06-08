@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Pencil, Plus, ListChecks } from 'lucide-react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { ArrowLeft, Pencil, Plus, ListChecks, Trash2 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useData } from '@/contexts/DataContext';
 import { useTable } from '@/hooks/useTable';
@@ -23,6 +23,7 @@ import {
 
 export function AuditDetail() {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const { profile } = useAuth();
   const { engagements, clients, users, templates, items } = useData();
   const progress = useTable<ChecklistProgress>('audit_checklist_progress');
@@ -80,9 +81,22 @@ export function AuditDetail() {
             <p className="mt-0.5 text-sm text-navy-400">{eng.audit_type}</p>
           </div>
           {isPartner && (
-            <button className="btn-ghost" onClick={() => setEditEng(true)}>
-              <Pencil size={16} /> Edit
-            </button>
+            <div className="flex gap-2">
+              <button className="btn-ghost" onClick={() => setEditEng(true)}>
+                <Pencil size={16} /> Edit
+              </button>
+              <button
+                className="btn-ghost text-red-600 hover:bg-red-50"
+                onClick={async () => {
+                  if (confirm(`Delete this ${eng.audit_type} engagement? This cannot be undone.`)) {
+                    await EngagementsApi.remove(eng.id);
+                    navigate('/audits');
+                  }
+                }}
+              >
+                <Trash2 size={16} /> Delete
+              </button>
+            </div>
           )}
         </div>
         <div className="mt-3 flex flex-wrap items-center gap-3 text-sm text-navy-600">

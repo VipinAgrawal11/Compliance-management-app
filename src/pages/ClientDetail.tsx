@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Pencil, Plus } from 'lucide-react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { ArrowLeft, Pencil, Plus, Trash2 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useData } from '@/contexts/DataContext';
 import { useTable } from '@/hooks/useTable';
@@ -12,11 +12,13 @@ import { ComplianceFormModal } from '@/components/compliance/ComplianceForm';
 import { EngagementFormModal } from '@/components/audit/EngagementForm';
 import { CommunicationLog } from '@/components/clients/CommunicationLog';
 import { DocumentFormModal } from '@/components/documents/DocumentForm';
+import { ClientsApi } from '@/lib/api';
 import { formatDate } from '@/lib/utils';
 import type { DocumentRequest } from '@/types';
 
 export function ClientDetail() {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const { profile } = useAuth();
   const { clients, compliances, engagements } = useData();
   const documents = useTable<DocumentRequest>('documents');
@@ -68,9 +70,26 @@ export function ClientDetail() {
             </p>
           </div>
           {isPartner && (
-            <button className="btn-ghost" onClick={() => setEditClient(true)}>
-              <Pencil size={16} /> Edit
-            </button>
+            <div className="flex gap-2">
+              <button className="btn-ghost" onClick={() => setEditClient(true)}>
+                <Pencil size={16} /> Edit
+              </button>
+              <button
+                className="btn-ghost text-red-600 hover:bg-red-50"
+                onClick={async () => {
+                  if (
+                    confirm(
+                      `Delete "${client.client_name}"? This also removes its compliances, engagements, documents and communication — this cannot be undone.`,
+                    )
+                  ) {
+                    await ClientsApi.remove(client.id);
+                    navigate('/clients');
+                  }
+                }}
+              >
+                <Trash2 size={16} /> Delete
+              </button>
+            </div>
           )}
         </div>
         <dl className="mt-4 grid grid-cols-2 gap-x-4 gap-y-3 text-sm lg:grid-cols-3">

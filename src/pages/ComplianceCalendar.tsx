@@ -225,6 +225,17 @@ function ComplianceDetailModal({
     }
   }
 
+  async function partnerDelete() {
+    if (!confirm(`Delete "${compliance.subcategory}" for ${clientName}? This cannot be undone.`)) return;
+    setBusy(true);
+    try {
+      await CompliancesApi.remove(compliance.id);
+    } finally {
+      setBusy(false);
+      onClose();
+    }
+  }
+
   if (editing) {
     return <ComplianceFormModal compliance={compliance} onClose={onClose} />;
   }
@@ -238,6 +249,9 @@ function ComplianceDetailModal({
         <>
           {isPartner && (
             <>
+              <button className="btn-ghost text-red-600 hover:bg-red-50" onClick={partnerDelete} disabled={busy}>
+                Delete
+              </button>
               <button className="btn-ghost" onClick={() => setEditing(true)}>
                 Edit
               </button>
