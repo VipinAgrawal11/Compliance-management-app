@@ -1,0 +1,27 @@
+# Dependencies
+node_modules
+
+# Build output
+dist
+dev-dist
+
+# TypeScript composite build artifacts
+*.tsbuildinfo
+vite.config.js
+vite.config.d.ts
+
+# Environment (contains your Supabase keys)
+.env
+.env.local
+.env.*.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor / OS
+.DS_Store
+*.local
+.vscode/*
+!.vscode/extensions.json
